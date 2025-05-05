@@ -1,0 +1,43 @@
+services:
+    coolify:
+        labels:
+            - "traefik.enable=true"
+            - "traefik.http.routers.coolify-http.rule=Host(`coolify.${DOMAIN?Variable not set}`)"
+            - "traefik.http.routers.coolify-http.entrypoints=http"
+            - "traefik.http.routers.coolify-http.middlewares=https-redirect"
+            - "traefik.http.routers.coolify-https.rule=Host(`coolify.${DOMAIN?Variable not set}`)"
+            - "traefik.http.routers.coolify-https.entrypoints=https"
+            - "traefik.http.routers.coolify-https.tls=true"
+            - "traefik.http.routers.coolify-https.tls.certresolver=le"
+            - "traefik.http.services.coolify.loadbalancer.server.port=8080"
+        networks:
+            - coolify
+            - traefik-public
+        expose:
+            - "8080"
+    soketi:
+        labels:
+            - "traefik.enable=true"
+            - "traefik.http.routers.coolify-realtime.rule=Host(`coolify.${DOMAIN?Variable not set}`) && PathPrefix(`/app`)"
+            - "traefik.http.routers.coolify-realtime.entrypoints=https"
+            - "traefik.http.routers.coolify-realtime.tls=true"
+            - "traefik.http.routers.coolify-realtime.tls.certresolver=le"
+            - "traefik.http.routers.coolify-realtime.service=coolify-realtime"
+            - "traefik.http.services.coolify-realtime.loadbalancer.server.port=6001"
+            - "traefik.http.routers.coolify-terminal.rule=Host(`coolify.${DOMAIN?Variable not set}`) && PathPrefix(`/terminal/ws`)"
+            - "traefik.http.routers.coolify-terminal.entrypoints=https"
+            - "traefik.http.routers.coolify-terminal.tls=true"
+            - "traefik.http.routers.coolify-terminal.tls.certresolver=le"
+            - "traefik.http.routers.coolify-terminal.service=coolify-terminal"
+            - "traefik.http.services.coolify-terminal.loadbalancer.server.port=6002"
+        networks:
+            - coolify
+            - traefik-public
+        expose:
+            - "6001"
+            - "6002"
+networks:
+    traefik-public:
+        external: true
+    coolify:
+        external: true
