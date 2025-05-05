@@ -1,0 +1,13 @@
+http:
+  middlewares:
+    sablier:
+      plugin:
+        sablier:
+          sablierUrl: http://sablier:10000
+          names: openwebui
+          sessionDuration: 1m
+          dynamic:
+            displayName: Scale to Zero
+            showDetails: "true"
+            theme: hacker-terminal
+            refreshFrequency: 5s
