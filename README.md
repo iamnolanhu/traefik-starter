@@ -1,5 +1,7 @@
 # Traefik Starter
 
+![Traefik Starter](.github/hero.png)
+
 A minimal, production-ready Traefik stack using Docker Compose. This setup is designed for easy replication and deployment on any server.
 
 ## Features
